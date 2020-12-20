@@ -17,24 +17,34 @@ I (196) esp_image: segment 4: paddr=0x0002a454 vaddr=0x40100080 size=0x044ec ( 1
 I (217) boot: Loaded app from partition at offset 0x10000
 I (248) gpio: GPIO[0]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0
 I (252) gpio: GPIO[2]| InputEn: 1| OutputEn: 1| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0
-I (263) main: cnt: 0
+I (264) main: cnt: 0
 
-I (1262) main: GPIO[0] intr, val: 0
+I (1262) main: cnt: 1
 
-I (1264) main: cnt: 1
+I (1995) main: GPIO[0] intr, val: 0
 
-I (2262) main: GPIO[0] intr, val: 0
+I (1997) main: cnt: 2
 
-I (2264) main: cnt: 2
+I (2262) main: cnt: 3
 
-I (3262) main: GPIO[0] intr, val: 0 
+I (2992) main: GPIO[0] intr, val: 0
 
-I (3264) main: cnt: 3
+I (2994) main: cnt: 4
 
-I (4262) main: GPIO[0] intr, val: 0
+I (3262) main: cnt: 5
 
-I (4264) main: cnt: 4
+I (3992) main: GPIO[0] intr, val: 0 
 
-I (5262) main: GPIO[0] intr, val: 0
+I (3994) main: cnt: 6
 
-I (5264) main: cnt: 5
+I (4262) main: cnt: 7
+
+I (4992) main: GPIO[0] intr, val: 0
+
+I (4992) main: cnt: 8
+
+I (5262) main: cnt: 9
+
+I (5992) main: GPIO[0] intr, val: 0
+
+
