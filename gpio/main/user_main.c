@@ -48,7 +48,7 @@ static const char *TAG = "main";
 #define GPIO_INPUT_IO_0     2
 
 #define GPIO_INPUT_PIN_SEL  (1ULL<<GPIO_INPUT_IO_0)
-
+int cnt = 0;
  uint32_t io_num;
 void vPrintString( const char *pcString )
 {
@@ -88,17 +88,30 @@ static void gpio_isr_handler(void *arg)
 static void gpio_task_example(void *arg)
 {
 	
-   for (;;) {
+   while(1) {
    	
-   	
-     xSemaphoreTake(xSemaphore, portMAX_DELAY ) ;
-     ESP_LOGI(TAG, "GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
-     
-      if (xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)) {
-            ESP_LOGI(TAG, "GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
+   	if( xSemaphore != NULL )
+    {
+        /* See if we can obtain the semaphore.  If the semaphore is not
+        available wait 10 ticks to see if it becomes free. */
+        if( xSemaphoreTake( xSemaphore, ( TickType_t ) 10 ) == pdTRUE )
+        {	
+			gpio_set_level(GPIO_OUTPUT_IO_0, 0); // set gpio high
+			ESP_LOGI(TAG, "GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
+			ESP_LOGI(TAG, "cnt: %d\n", cnt++);
+            vTaskDelay(1000 / portTICK_RATE_MS);
+			//vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS( 1000 )); 
+            /* We have finished accessing the shared resource.  Release the
+            semaphore. */
+            xSemaphoreGive( xSemaphore );
         }
-     
-     }
+        /*else
+        {
+           	ESP_LOGI(TAG, "Task does not have the semaphore\n");
+        }
+      */
+	}
+   }
 }
 
 void app_main(void)
@@ -150,13 +163,13 @@ void app_main(void)
     //hook isr handler for specific gpio pin again
     gpio_isr_handler_add(GPIO_INPUT_IO_0, gpio_isr_handler, (void *) GPIO_INPUT_IO_0);
     
-    int cnt = 0;
+    
 
     while (1) {
         ESP_LOGI(TAG, "cnt: %d\n", cnt++);
         vTaskDelay(1000 / portTICK_RATE_MS);
-	    gpio_set_level(GPIO_OUTPUT_IO_0, cnt % 2);
-        gpiooutput();
+	   gpio_set_level(GPIO_OUTPUT_IO_0, 0);
+        //gpiooutput();
     }
 }
 
